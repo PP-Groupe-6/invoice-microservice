@@ -1,14 +1,15 @@
 package main
+
 import (
 	"net/http"
 	"os"
 
+	invoiceService "github.com/PP-Groupe-6/invoice-microservice"
 	"github.com/go-kit/kit/log"
-	"https://github.com/PP-Groupe-6/invoice-microservice"
 )
 
 func main() {
-	info := dbConnexionInfo{
+	info := invoiceService.dbConnexionInfo{
 		"postgre://",
 		"5432",
 		"prix_banque_test",
@@ -16,7 +17,7 @@ func main() {
 		"secret",
 	}
 
-	service := NewInvoiceService(info)
+	service := invoiceService.NewInvoiceService(info)
 
 	var logger log.Logger
 	{
