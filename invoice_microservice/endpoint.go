@@ -2,6 +2,7 @@ package invoice_microservice
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/go-kit/kit/endpoint"
 )
@@ -39,11 +40,13 @@ type GetInvoiceListResponse struct {
 }
 
 type InvoiceResponseFormat struct {
-	Id           string  `json:"id"`
-	Amount       float32 `json:"amount"`
-	State        string  `json:"state"`
-	ExpDate      string  `json:"expDate"`
-	WithClientId string  `json:"withClientId"`
+	Name         string `json:"name"`
+	Mail         string `json:"mail"`
+	Phone        string `json:"phone"`
+	Amount       string `json:"amount"`
+	State        string `json:"state"`
+	ExpDate      string `json:"expDate"`
+	WithClientId string `json:"withClientId"`
 }
 
 func MakeGetInvoiceListEndpoint(s InvoiceService) endpoint.Endpoint {
@@ -54,9 +57,17 @@ func MakeGetInvoiceListEndpoint(s InvoiceService) endpoint.Endpoint {
 		for _, Invoice := range invoices {
 			// Si on veut les invoice créées et que l'utilisateur est le récepteur de l'invoice
 			if req.CreatedBy && Invoice.AccountReceiverId == req.ClientID {
+				otherAccount, err := s.GetAccountInformation(ctx, Invoice.AccountPayerId)
+
+				if err != nil {
+					return GetInvoiceListResponse{}, err
+				}
+
 				InvoicesRet = append(InvoicesRet, InvoiceResponseFormat{
-					Invoice.ID,
-					float32(Invoice.Amount),
+					otherAccount.Name + " " + otherAccount.Surname,
+					otherAccount.Mail,
+					otherAccount.Phone,
+					fmt.Sprint(Invoice.Amount),
 					StateToString(Invoice.State),
 					Invoice.ExpirationDate,
 					Invoice.AccountPayerId,
@@ -64,12 +75,20 @@ func MakeGetInvoiceListEndpoint(s InvoiceService) endpoint.Endpoint {
 			}
 			// Si on veut les invoice reçues et que l'utilisateur et le payeur de l'invoice
 			if !req.CreatedBy && Invoice.AccountPayerId == req.ClientID {
+				otherAccount, err := s.GetAccountInformation(ctx, Invoice.AccountReceiverId)
+
+				if err != nil {
+					return GetInvoiceListResponse{}, err
+				}
+
 				InvoicesRet = append(InvoicesRet, InvoiceResponseFormat{
-					Invoice.ID,
-					float32(Invoice.Amount),
+					otherAccount.Name + " " + otherAccount.Surname,
+					otherAccount.Mail,
+					otherAccount.Phone,
+					fmt.Sprint(Invoice.Amount),
 					StateToString(Invoice.State),
 					Invoice.ExpirationDate,
-					Invoice.AccountReceiverId,
+					Invoice.AccountPayerId,
 				})
 			}
 		}

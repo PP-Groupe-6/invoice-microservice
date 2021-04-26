@@ -13,3 +13,11 @@ type Invoice struct {
 	AccountPayerId    string  `json:"invoice_payer_id,omitempty" db:"account_invoice_payer_id"`
 	AccountReceiverId string  `json:"invoice_receveiver_id,omitempty" db:"account_invoice_receiver_id"`
 }
+
+type AccountInfo struct {
+	Name    string  `json:"name,omitempty" db:"name"`
+	Surname string  `json:"surname,omitempty" db:"surname"`
+	Mail    string  `json:"mail_adress,omitempty" db:"mail_adress"`
+	Phone   string  `json:"phone_number,omitempty" db:"phone_number"`
+	Amount  float64 `json:"amount,omitempty" db:"account_amount"`
+}

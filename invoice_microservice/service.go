@@ -16,6 +16,7 @@ type InvoiceService interface {
 	GetInvoiceList(ctx context.Context, id string) ([]Invoice, error)
 	GetIdFromMail(ctx context.Context, mail string) (string, error)
 	PayInvoice(ctx context.Context, id string) (bool, error)
+	GetAccountInformation(ctx context.Context, id string) (AccountInfo, error)
 }
 
 var (
@@ -228,4 +229,16 @@ func (s *invoiceService) PayInvoice(ctx context.Context, id string) (bool, error
 	db.Close()
 
 	return true, nil
+}
+
+func (s *invoiceService) GetAccountInformation(ctx context.Context, id string) (AccountInfo, error) {
+	db := GetDbConnexion(s.DbInfos)
+
+	res := AccountInfo{}
+	err := db.Get(&res, "SELECT name, surname, mail_adress, phone_number, account_amount FROM account where client_id=$1", id)
+
+	if err != nil {
+		return AccountInfo{}, err
+	}
+	return res, err
 }
