@@ -52,7 +52,7 @@ type InvoiceResponseFormat struct {
 func MakeGetInvoiceListEndpoint(s InvoiceService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(GetInvoiceListRequest)
-		var InvoicesRet []InvoiceResponseFormat
+		InvoicesRet := []InvoiceResponseformat{}
 		invoices, err := s.GetInvoiceList(ctx, req.ClientID)
 		for _, Invoice := range invoices {
 			// Si on veut les invoice créées et que l'utilisateur est le récepteur de l'invoice
@@ -78,7 +78,7 @@ func MakeGetInvoiceListEndpoint(s InvoiceService) endpoint.Endpoint {
 				otherAccount, err := s.GetAccountInformation(ctx, Invoice.AccountReceiverId)
 
 				if err != nil {
-					return GetInvoiceListResponse{}, err
+					return GetInvoiceListResponse{[]}, err
 				}
 
 				InvoicesRet = append(InvoicesRet, InvoiceResponseFormat{
