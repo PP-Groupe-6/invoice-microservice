@@ -13,7 +13,7 @@ type InvoiceService interface {
 	Read(ctx context.Context, id string) (Invoice, error)
 	Update(ctx context.Context, id string, invoice Invoice) (Invoice, error)
 	Delete(ctx context.Context, id string) error
-	GetInvoiceList(ctx context.Context, id string) ([]*Invoice, error)
+	GetInvoiceList(ctx context.Context, id string) ([]Invoice, error)
 	GetIdFromMail(ctx context.Context, mail string) (string, error)
 	PayInvoice(ctx context.Context, id string) (bool, error)
 }
@@ -31,19 +31,19 @@ var (
 )
 
 type invoiceService struct {
-	DbInfos dbConnexionInfo
+	DbInfos DbConnexionInfo
 }
 
-func NewInvoiceService(dbinfos dbConnexionInfo) InvoiceService {
+func NewInvoiceService(dbinfos DbConnexionInfo) InvoiceService {
 	return &invoiceService{
 		DbInfos: dbinfos,
 	}
 }
 
-func (s *invoiceService) GetInvoiceList(ctx context.Context, id string) ([]*Invoice, error) {
+func (s *invoiceService) GetInvoiceList(ctx context.Context, id string) ([]Invoice, error) {
 	db := GetDbConnexion(s.DbInfos)
 
-	invoices := make([]*Invoice, 0)
+	invoices := make([]Invoice, 0)
 	rows, err := db.Queryx("SELECT * FROM invoice WHERE account_invoice_payer_id=$1 OR account_invoice_receiver_id=$1", id)
 
 	for rows.Next() {
@@ -51,6 +51,8 @@ func (s *invoiceService) GetInvoiceList(ctx context.Context, id string) ([]*Invo
 		if err := rows.StructScan(&i); err != nil {
 			return nil, err
 		}
+
+		invoices = append(invoices, i)
 	}
 
 	if err != nil {

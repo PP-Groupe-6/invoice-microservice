@@ -4,17 +4,17 @@ import (
 	"net/http"
 	"os"
 
-	invoiceService "github.com/PP-Groupe-6/invoice-microservice"
+	invoiceService "github.com/PP-Groupe-6/invoice-microservice/invoice_microservice"
 	"github.com/go-kit/kit/log"
 )
 
 func main() {
-	info := invoiceService.dbConnexionInfo{
-		"postgre://",
-		"5432",
-		"prix_banque_test",
-		"admin",
-		"secret",
+	info := invoiceService.DbConnexionInfo{
+		DbUrl:    "postgre://",
+		DbPort:   "5432",
+		DbName:   "prix_banque_test",
+		Username: "dev",
+		Password: "dev",
 	}
 
 	service := invoiceService.NewInvoiceService(info)
@@ -26,7 +26,7 @@ func main() {
 		logger = log.With(logger, "caller", log.DefaultCaller)
 	}
 
-	err := http.ListenAndServe(":8000", MakeHTTPHandler(service, logger))
+	err := http.ListenAndServe(":8000", invoiceService.MakeHTTPHandler(service, logger))
 	if err != nil {
 		panic(err)
 	}
