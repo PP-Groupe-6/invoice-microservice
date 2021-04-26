@@ -1,0 +1,124 @@
+{
+	"info": {
+		"_postman_id": "9522a362-4849-40af-9e32-903b62b38774",
+		"name": "Invoices",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "List invoices",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"ClientID\": \"sIowRDsqanK3vj0jfRVn1i8yLrmJfu93qDDlZwkeHFl4td0W2czjJbutqwibI8iaQJ7skSHtLpWHUtfN7gFQ0f40e6J1Fie4LeuRrmLHkxfpr6bv5VOYpwGvDyoux7Zus0fw2R2IRWEr3CqKtrohdX8t9pf37I17WoSVFg83hrb18BoKD3h989i3I36GAjXGLyEWbj6RsD6lt5TEQOjwJEZDZTeBOUOq0fNOUFmEW47cEgQ2R4DvIj5AN2iPDsv\",\r\n\t\"CreatedBy\": false\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8002/invoices/",
+					"host": [
+						"localhost"
+					],
+					"port": "8002",
+					"path": [
+						"invoices",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add invoices",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"uid\" : \"fErnq0RHXlGBI6DuQ88O3T6BCIizTwgt1YtNte1lAUE1uqoJOVDxHUihPSTTf57GVORuB8XFT1f8lUASGP8p0Fzj69wGDOv1tzsnwSlHbPp4M2fggbiNItk0w10E7Ro3sZ0V77osOzXU43pLHZ53gFLDOrG8NVzUTr0FM33ySDa5f53KTJ7AUfTujnbiVwiwIWWCS10YBOKcMqGvJ5s48AkThnzqfSCIRM2Omh0xeJvn4RSYSROfsi8ol3iqbPa\",\r\n  \"emailClient\" : \"codixos@gmail.com\",\r\n  \"amount\" : 17,\r\n  \"expDate\" :\"2022-02-25\"\r\n}\r\n\r\n\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8002/invoices/",
+					"host": [
+						"localhost"
+					],
+					"port": "8002",
+					"path": [
+						"invoices",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Pay invoice",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"Iid\" : \"0ziycmXQp74egaPEQkVTOXsmauJYWRzppfsJ0ZhAiL2B0pciCR4toPzj0XUJLk5kLByZ0ulHj0W6dw84UcxvqSAMM9zBmKsSzwgbZ3olJr85P9ws5e5pcckHWKctJhzFW9CG3ex9oJjBx497ZihhZev0utJeFAvwYoHnWDB2Vi2rJGXdH83HUUvQwCqAqKoi3R42kmbQBUJoFArBlub7ofu0qNpgrhKQyCKBMx9XIWlurTmgtp2D5jloiMbCUBL\"\r\n}\r\n\r\n\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8002/invoices/pay",
+					"host": [
+						"localhost"
+					],
+					"port": "8002",
+					"path": [
+						"invoices",
+						"pay"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete invoice",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"Iid\": \"gqC1e8X9dovX1bHFLvYcmwZVnarm4xXKv7k4Y5P2wEPiLGKJlXSLrFTvW45oBBayrWGP2GF7G4FwKnFw8xD49ejLZloom2VnoryBWCp6cVw6JaV4JY9fdB2JyB7XvKihLgazckRj9BRZBhFUUJI1PR2tQdwm3uoikvaRE87rSSxBwJP6EQhNiXKPj9ruWLBZ249c52dQYGwya7eNkW9woSQXXzV4pmnlclxPR3Z7t87RkRRVGWMdh4vvwSNMvId\"\r\n}\r\n\r\n\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8002/invoices/",
+					"host": [
+						"localhost"
+					],
+					"port": "8002",
+					"path": [
+						"invoices",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
