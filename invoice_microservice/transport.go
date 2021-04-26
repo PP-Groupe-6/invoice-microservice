@@ -80,7 +80,7 @@ func decodeAddRequest(_ context.Context, r *http.Request) (request interface{}, 
 }
 
 func decodePayRequest(_ context.Context, r *http.Request) (request interface{}, err error) {
-	var req DeleteRequest
+	var req InvoicePaymentRequest
 	if e := json.NewDecoder(r.Body).Decode(&req); e != nil {
 		return nil, e
 	}
@@ -88,7 +88,7 @@ func decodePayRequest(_ context.Context, r *http.Request) (request interface{}, 
 }
 
 func decodeDeleteRequest(_ context.Context, r *http.Request) (request interface{}, err error) {
-	var req InvoicePaymentRequest
+	var req DeleteRequest
 	if e := json.NewDecoder(r.Body).Decode(&req); e != nil {
 		return nil, e
 	}

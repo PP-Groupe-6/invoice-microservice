@@ -51,7 +51,6 @@ func MakeGetInvoiceListEndpoint(s InvoiceService) endpoint.Endpoint {
 		req := request.(GetInvoiceListRequest)
 		var InvoicesRet []InvoiceResponseFormat
 		invoices, err := s.GetInvoiceList(ctx, req.ClientID)
-		//fmt.Println("lmao : " + err.Error())
 		for _, Invoice := range invoices {
 			// Si on veut les invoice créées et que l'utilisateur est le récepteur de l'invoice
 			if req.CreatedBy && Invoice.AccountReceiverId == req.ClientID {
@@ -110,7 +109,7 @@ func MakeAddEndpoint(s InvoiceService) endpoint.Endpoint {
 
 		_, err = s.Create(ctx, i)
 
-		if err != nil {
+		if err == nil {
 			return AddResponse{true}, nil
 		} else {
 			return nil, err
