@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"net/http"
+	"strconv"
 
 	"github.com/go-kit/kit/log"
 	"github.com/go-kit/kit/transport"
@@ -33,7 +34,7 @@ func MakeHTTPHandler(s InvoiceService, logger log.Logger) http.Handler {
 	// DELETE 	/invoices/		deletes the invoice corresponding to the given ID
 	// POST		/invoices/pay	tries to process the payment of the given invoice
 
-	r.Methods("GET").Path("/invoices/").Handler(httptransport.NewServer(
+	r.Methods("GET").Path("/invoices/{id}").Handler(httptransport.NewServer(
 		e.GetInvoiceListEndpoint,
 		decodeInvoiceListRequest,
 		encodeResponse,
@@ -76,9 +77,15 @@ func MakeHTTPHandler(s InvoiceService, logger log.Logger) http.Handler {
 }
 
 func decodeInvoiceListRequest(_ context.Context, r *http.Request) (request interface{}, err error) {
-	var req GetInvoiceListRequest
-	if e := json.NewDecoder(r.Body).Decode(&req); e != nil {
-		return nil, e
+	vars := mux.Vars(r)
+	createdBy, _ := strconv.ParseBool(r.URL.Query().Get("CreatedBy"))
+	idparam, ok := vars["id"]
+	if !ok {
+		return nil, ErrBadRouting
+	}
+	var req = GetInvoiceListRequest{
+		idparam,
+		createdBy,
 	}
 	return req, nil
 }
