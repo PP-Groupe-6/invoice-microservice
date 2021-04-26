@@ -140,6 +140,7 @@ type DeleteRequest struct {
 }
 
 type DeleteResponse struct {
+	Deleted bool `json:"deleted"`
 }
 
 func MakeDeleteEndpoint(s InvoiceService) endpoint.Endpoint {
@@ -148,7 +149,11 @@ func MakeDeleteEndpoint(s InvoiceService) endpoint.Endpoint {
 
 		err := s.Delete(ctx, req.Iid)
 
-		return DeleteResponse{}, err
+		if err != nil {
+			return DeleteResponse{false}, err
+		} else {
+			return DeleteResponse{true}, nil
+		}
 	}
 }
 
