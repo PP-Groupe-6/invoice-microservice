@@ -181,12 +181,11 @@ func (s *invoiceService) PayInvoice(ctx context.Context, id string) (bool, error
 	// Dans un premier temps on récupère le solde du payeur
 	payerBalance := float64(0.0)
 
-	fmt.Println(InvoiceToPay.AccountPayerId)
 	errPB := db.Get(&payerBalance, "SELECT account_amount FROM account WHERE client_id=$1", InvoiceToPay.AccountPayerId)
 
 	// On récupère ensuite le solde du receveur
-	recieverBalance := float64(0.0)
-	errRB := db.Get(&recieverBalance, "SELECT account_amount FROM account WHERE client_id=$1", InvoiceToPay.AccountReceiverId)
+	receiverBalance := float64(0.0)
+	errRB := db.Get(&receiverBalance, "SELECT account_amount FROM account WHERE client_id=$1", InvoiceToPay.AccountReceiverId)
 
 	if errPB != nil {
 		fmt.Println("Payer balance error")
@@ -204,7 +203,9 @@ func (s *invoiceService) PayInvoice(ctx context.Context, id string) (bool, error
 
 	tx := db.MustBegin()
 	// On mets à jour le solde du payeur
-	resPayer := tx.MustExec("UPDATE account SET account_amount = '"+fmt.Sprint(payerBalance-InvoiceToPay.Amount)+"' WHERE client_id=$1", InvoiceToPay.AccountPayerId)
+	newPayerBalance := payerBalance - InvoiceToPay.Amount
+	fmt.Print("Previous balance : " + fmt.Sprint(payerBalance) + " new balance : " + fmt.Sprint(newPayerBalance))
+	resPayer := tx.MustExec("UPDATE account SET account_amount = '"+fmt.Sprint(newPayerBalance)+"' WHERE client_id=$1", InvoiceToPay.AccountPayerId)
 
 	if rows, errUpdate := resPayer.RowsAffected(); rows != 1 {
 		tx.Rollback()
@@ -212,7 +213,9 @@ func (s *invoiceService) PayInvoice(ctx context.Context, id string) (bool, error
 	}
 
 	// On mets à jour le solde du receveur
-	resReciever := tx.MustExec("UPDATE account SET account_amount = '"+fmt.Sprint(recieverBalance+InvoiceToPay.Amount)+"' WHERE client_id=$1", InvoiceToPay.AccountPayerId)
+	newReceiverBalance := receiverBalance + InvoiceToPay.Amount
+	fmt.Print("Previous balance : " + fmt.Sprint(receiverBalance) + " new balance : " + fmt.Sprint(newReceiverBalance))
+	resReciever := tx.MustExec("UPDATE account SET account_amount = '"+fmt.Sprint(newReceiverBalance)+"' WHERE client_id=$1", InvoiceToPay.AccountPayerId)
 	if rows, errUpdate := resReciever.RowsAffected(); rows != 1 {
 		tx.Rollback()
 		return false, errUpdate
