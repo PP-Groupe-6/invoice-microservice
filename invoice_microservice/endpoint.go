@@ -40,13 +40,13 @@ type GetInvoiceListResponse struct {
 }
 
 type InvoiceResponseFormat struct {
-	Name         string `json:"name"`
-	Mail         string `json:"mail"`
-	Phone        string `json:"phone"`
-	Amount       string `json:"amount"`
-	State        string `json:"state"`
-	ExpDate      string `json:"expDate"`
-	WithClientId string `json:"withClientId"`
+	Name      string `json:"name"`
+	Mail      string `json:"mail"`
+	Phone     string `json:"phone"`
+	Amount    string `json:"amount"`
+	State     string `json:"state"`
+	ExpDate   string `json:"expDate"`
+	InvoiceID string `json:"InvoiceID"`
 }
 
 func MakeGetInvoiceListEndpoint(s InvoiceService) endpoint.Endpoint {
@@ -70,7 +70,7 @@ func MakeGetInvoiceListEndpoint(s InvoiceService) endpoint.Endpoint {
 					fmt.Sprint(Invoice.Amount),
 					StateToString(Invoice.State),
 					Invoice.ExpirationDate,
-					Invoice.AccountPayerId,
+					Invoice.ID,
 				})
 			}
 			// Si on veut les invoice reçues et que l'utilisateur et le payeur de l'invoice
@@ -88,7 +88,7 @@ func MakeGetInvoiceListEndpoint(s InvoiceService) endpoint.Endpoint {
 					fmt.Sprint(Invoice.Amount),
 					StateToString(Invoice.State),
 					Invoice.ExpirationDate,
-					Invoice.AccountPayerId,
+					Invoice.ID,
 				})
 			}
 		}
